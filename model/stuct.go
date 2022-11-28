@@ -7,7 +7,10 @@ type User struct {
 	SecretProtection string
 }
 type Message struct {
-	ID      int
-	Name    string
-	Messgae string
+	ID             int
+	Name           string
+	Messgae        string
+	CommentderID   int
+	CommentderName string
+	Comment        string
 }

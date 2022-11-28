@@ -2,13 +2,16 @@ package dao
 
 import (
 	"fmt"
+	"github.com/gin-gonic/gin"
+	"net/http"
+	"redrock/web_git/global"
 	"redrock/web_git/model"
 )
 
 // 注册数据
 func InsertData(i int, n string, p string, ps string) {
 	sqlStr := "insert into userMassage(ID,username,password,secretProtection) values (?,?,?,?)"
-	r, err := db.Exec(sqlStr, i, n, p, ps)
+	r, err := global.DB.Exec(sqlStr, i, n, p, ps)
 	if err != nil {
 		fmt.Printf("err: %v\n", err)
 		return
@@ -26,7 +29,7 @@ func QueryRowData(i int, s string) (string, string) {
 	var n, p string
 	sqlStr := "select ID,secretProtection from userMassage where ID=? and secretProtection=? "
 	var u model.User
-	err := db.QueryRow(sqlStr, i, s).Scan(&u.Name, &u.Password)
+	err := global.DB.QueryRow(sqlStr, i, s).Scan(&u.Name, &u.Password)
 	if err != nil {
 		fmt.Printf("err: %v\n", err)
 	}
@@ -39,7 +42,7 @@ func QueryRowData(i int, s string) (string, string) {
 func QueryManyData(n string, p string) bool {
 	is := false
 	sqlStr := "select username,password from usermassage"
-	r, err := db.Query(sqlStr)
+	r, err := global.DB.Query(sqlStr)
 	if err != nil {
 		fmt.Printf("err: %v\n", err)
 	}
@@ -57,4 +60,30 @@ func QueryManyData(n string, p string) bool {
 		}
 	}
 	return is
+}
+
+// 修改密码
+func NewPassword(newpassword string, secret string, c *gin.Context) {
+	strSql := "update usermessage set password=? where secretProtection=?"
+	r, err := global.DB.Exec(strSql, newpassword, secret)
+	if err != nil {
+		fmt.Printf("err: %v\n", err)
+		return
+	}
+	i2, err2 := r.RowsAffected()
+	if err != nil {
+		fmt.Printf("err2: %v\n", err2)
+		return
+	}
+	fmt.Printf("i2: %v\n", i2)
+	var p string
+	err3 := global.DB.QueryRow("select password from usermessage where id=?", global.LoginID).Scan(&p)
+	if err3 != nil {
+		fmt.Printf("err: %v\n", err)
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"state":  "200",
+		"你的新密码为": p,
+	})
 }
