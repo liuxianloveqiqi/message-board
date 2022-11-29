@@ -71,6 +71,6 @@ func SecretQurry(c *gin.Context) {
 // 修改密码
 func ResetPassword(c *gin.Context) {
 	newPassword := c.PostForm("new-password")
-	protationSecret := c.PostForm("")
+	protationSecret := c.PostForm("serect")
 	service.ResetPassword(newPassword, protationSecret, c)
 }

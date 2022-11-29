@@ -10,7 +10,7 @@ import (
 
 // 注册数据
 func InsertData(i int, n string, p string, ps string) {
-	sqlStr := "insert into userMassage(ID,username,password,secretProtection) values (?,?,?,?)"
+	sqlStr := "insert into usermessage(ID,username,password,secretProtection) values (?,?,?,?)"
 	r, err := global.DB.Exec(sqlStr, i, n, p, ps)
 	if err != nil {
 		fmt.Printf("err: %v\n", err)
@@ -27,7 +27,7 @@ func InsertData(i int, n string, p string, ps string) {
 // 查询密保
 func QueryRowData(i int, s string) (string, string) {
 	var n, p string
-	sqlStr := "select ID,secretProtection from userMassage where ID=? and secretProtection=? "
+	sqlStr := "select ID,secretProtection from usermessage where ID=? and secretProtection=? "
 	var u model.User
 	err := global.DB.QueryRow(sqlStr, i, s).Scan(&u.Name, &u.Password)
 	if err != nil {
@@ -41,7 +41,7 @@ func QueryRowData(i int, s string) (string, string) {
 // 用户名和密码登录查询
 func QueryManyData(n string, p string) bool {
 	is := false
-	sqlStr := "select username,password from usermassage"
+	sqlStr := "select username,password from usermessage"
 	r, err := global.DB.Query(sqlStr)
 	if err != nil {
 		fmt.Printf("err: %v\n", err)
@@ -64,12 +64,13 @@ func QueryManyData(n string, p string) bool {
 
 // 修改密码
 func NewPassword(newpassword string, secret string, c *gin.Context) {
-	strSql := "update usermessage set password=? where secretProtection=?"
-	r, err := global.DB.Exec(strSql, newpassword, secret)
+	strSql := "update usermessage set password=? where secretProtection=? and userID=?"
+	r, err := global.DB.Exec(strSql, newpassword, secret, global.LoginID)
 	if err != nil {
 		fmt.Printf("err: %v\n", err)
 		return
 	}
+	fmt.Println("-------------------------------------***************************")
 	i2, err2 := r.RowsAffected()
 	if err != nil {
 		fmt.Printf("err2: %v\n", err2)

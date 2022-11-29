@@ -9,6 +9,6 @@ import (
 func main() {
 	r := gin.Default()
 	cmd.Userroute(r)
-	//cmd.Messageroute(r)
+	cmd.Messageroute(r)
 	r.Run()
 }

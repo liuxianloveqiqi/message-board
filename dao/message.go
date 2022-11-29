@@ -39,7 +39,7 @@ func SeeWords(c *gin.Context) {
 			fmt.Printf("err2: %v\n", err2)
 			return
 		}
-		if global.Message != "" {
+		if global.M.Messgae != "" {
 
 			c.JSON(http.StatusOK, gin.H{
 				"发送者ID":   global.M.ID,

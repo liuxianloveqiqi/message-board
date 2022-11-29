@@ -33,11 +33,11 @@ func SendWords(c *gin.Context) {
 		"状态": 200,
 	})
 	p := c.PostForm("postID")
-	postID, _ := strconv.Atoi(p)
-	postUerName := c.PostForm("postname")
-	message := c.PostForm("message")
+	global.PostID, _ = strconv.Atoi(p)
+	global.PostUerName = c.PostForm("postname")
+	global.Message = c.PostForm("message")
 	fmt.Println("------------------------")
-	fmt.Println(postID, postUerName, message)
+	fmt.Println(global.PostID, global.PostUerName, global.Message)
 	dao.LeaveWords()
 }
 

@@ -7,6 +7,7 @@ import (
 
 // 修改密码
 func ResetPassword(np string, ps string, c *gin.Context) {
+	dao.Opendata()
 	dao.NewPassword(np, ps, c)
 
 }
