@@ -12,7 +12,7 @@ func LeaveWords() {
 	sqlStr := "insert into messageboard(senderID,sendername,receiveID,receivename,message) values (?,?,?,?,?)"
 	r, err := global.DB.Exec(sqlStr, global.LoginID, global.LoginName, global.PostID, global.PostUerName, global.Message)
 	if err != nil {
-		fmt.Printf("err: %v\n", err)
+		fmt.Printf("errkkkkkkkk: %v\n", err)
 		return
 	}
 	i2, err2 := r.LastInsertId()
@@ -56,7 +56,7 @@ func SeeWords(c *gin.Context) {
 	}
 }
 func SendComment() {
-	strSql := "update messageboard set commenterID=?,commenterName=?,commend=? where senderid=? and receiveID=?"
+	strSql := "update messageboard set commenterID=?,commenterName=?,comment=? where senderid=? and receiveID=?"
 	r, err := global.DB.Exec(strSql, global.LoginID, global.LoginName, global.CommendWords, global.SenderID, global.ReceiverID)
 	if err != nil {
 		fmt.Printf("err: %v\n", err)
@@ -133,10 +133,10 @@ func NewMessage(si int, m string, c *gin.Context) {
 	}
 }
 func NewComment(si int, ri int, nc string, c *gin.Context) {
-	strSql := "update messageboard set comment=? where receiveID=? and senderID=? and commenterID=?"
+	strSql := "update messageboard set comment=? where senderID=? and receiveID=? and commenterID=?"
 	r, err := global.DB.Exec(strSql, nc, si, ri, global.LoginID)
 	if err != nil {
-		fmt.Printf("err: %v\n", err)
+		fmt.Printf("errkkkkkkkkkk: %v\n", err)
 		return
 	}
 	i2, err2 := r.RowsAffected()
@@ -146,11 +146,11 @@ func NewComment(si int, ri int, nc string, c *gin.Context) {
 	}
 	fmt.Printf("i2: %v\n", i2)
 	//查看新留言
-	strsql2 := "select comment form messageboard where receiveID=? and senderID=? and commenterID=?"
+	strsql2 := "select comment from messageboard where receiveID=? and senderID=? and commenterID=?"
 	var p string
 	err3 := global.DB.QueryRow(strsql2, ri, si, global.LoginID).Scan(&p)
 	if err3 != nil {
-		fmt.Printf("err: %v\n", err)
+		fmt.Printf("err3: %v\n", err)
 		return
 	}
 	if p != "" {

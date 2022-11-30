@@ -38,6 +38,18 @@ func QueryRowData(i int, s string) (string, string) {
 	return n, p
 }
 
+// 登录后找到用户ID
+func QueryID(n string) {
+	sqlStr := "select ID from usermessage where username=?"
+	err := global.DB.QueryRow(sqlStr, global.LoginName).Scan(&global.LoginID)
+	if err != nil {
+		fmt.Printf("查询ID时错误：%v", err)
+	} else {
+		fmt.Println(global.LoginID)
+	}
+
+}
+
 // 用户名和密码登录查询
 func QueryManyData(n string, p string) bool {
 	is := false

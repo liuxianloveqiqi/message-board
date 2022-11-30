@@ -51,7 +51,7 @@ func Login(c *gin.Context) {
 		})
 		return
 	}
-
+	dao.QueryID(global.LoginName)
 }
 
 // 密保查询
